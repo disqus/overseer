@@ -1,0 +1,29 @@
+{% extends "overseer/base.html" %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th class="status">Status</th>
+            <th>Service</th>
+            <th>Last Event</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service in service_list %}
+            <tr>
+                <td class="status status-{{ service.status }}">{{ service.get_status_display }}</td>
+                <td class="service">
+                    <h2><a href="#">{{ service.name }}</a></h2>
+                    {% if service.description %}
+                        <p>{{ service.description }}</p>
+                    {% endif %}
+                </td>
+                <td><a href="#">{{ service.date_updated|timesince }}</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,4 @@
+include setup.py README MANIFEST.in LICENSE
+recursive-include overseer/templates *
+recursive-include overseer/media *
+global-exclude *~
