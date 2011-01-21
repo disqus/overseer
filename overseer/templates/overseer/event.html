@@ -6,7 +6,7 @@
     <h3>Event Details</h3>
 
     <div class="latest-event event status-{{ event.status }}">
-        <p>{{ event.description }}</p>
+        <p>{{ event.get_message }}</p>
         <time>{{ event.date_updated|timesince }}{% if not event.status %} (lasted {{ event.get_duration|duration }}){% endif %}</time>
         <span class="affects">affects {% for slug, name in event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
     </div>
