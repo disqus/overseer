@@ -16,6 +16,7 @@ INSTALLED_APPS = (
 
     'devserver',
     'overseer',
+    'south',
 )
 
 ADMIN_MEDIA_PREFIX = '/admin/media/'
