@@ -6,7 +6,7 @@
     {% if latest_event %}
         <div class="latest-event event status-{{ latest_event.status }}">
             <p>{{ latest_event.description }}</p>
-            <time>{{ latest_event.date_updated|timesince }} (lasted {{ latest_event.get_duration|duration }})</time>
+            <time>{{ latest_event.date_updated|timesince }}{% if not latest_event.status %} (lasted {{ latest_event.get_duration|duration }}){% endif %}</time>
             <span class="affects">affects {% for slug, name in latest_event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
         </div>
     {% endif %}
@@ -44,7 +44,7 @@
                 {% for event in event_list %}
                     <li class="event status-{{ event.status }}">
                         <p>{{ event.description }}</p>
-                        <time>{{ event.date_updated|timesince }}</time>
+                        <time>{{ event.date_updated|timesince }}{% if not event.status %} (lasted {{ event.get_duration|duration }}){% endif %}</time>
                         <span class="affects">affects {% for slug, name in event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                     </li>
                 {% endfor %}
