@@ -23,7 +23,7 @@
             <ul>
                 {% for event in event_list %}
                     <li class="event status-{{ event.status }}">
-                        <p>{{ event.description }}</p>
+                        <p><a href="{% url overseer:event event.pk %}">{{ event.description }}</a></p>
                         <time>{{ event.date_updated|timesince }}{% if not event.status %} (lasted {{ event.get_duration|duration }}){% endif %}</time>
                         <span class="affects">affects {% for slug, name in event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                     </li>
