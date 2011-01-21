@@ -133,6 +133,9 @@ header h1 {
 header h1 a {
     text-decoration: none;
 }
+header h1 a:hover {
+    color: inherit;
+}
 
 header h1 {
     font-size: 2em;
@@ -144,6 +147,9 @@ footer {
     border-top: solid 1px #ddd;
     padding: 20px;
     background-color: #e5e5e5;
+}
+footer a {
+    font-weight: bold;
 }
 
 #container { background-color: #eee; }
