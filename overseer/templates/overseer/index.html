@@ -7,7 +7,7 @@
         <div class="latest-event event status-{{ latest_event.status }}">
             <p>{{ latest_event.description }}</p>
             <time>{{ latest_event.date_updated|timesince }} (lasted {{ latest_event.get_duration|duration }})</time>
-            <span class="affects">affects {{ latest_event.get_service_names|join:", "}}</span>
+            <span class="affects">affects {% for slug, name in latest_event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
         </div>
     {% endif %}
 
@@ -45,7 +45,7 @@
                     <li class="event status-{{ event.status }}">
                         <p>{{ event.description }}</p>
                         <time>{{ event.date_updated|timesince }}</time>
-                        <span class="affects">affects {{ event.get_service_names|join:", "}}</span>
+                        <span class="affects">affects {% for slug, name in event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                     </li>
                 {% endfor %}
             </ul>

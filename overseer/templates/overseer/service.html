@@ -23,7 +23,7 @@
                     <li class="event status-{{ event.status }}">
                         <p>{{ event.description }}</p>
                         <time>{{ event.date_updated|timesince }}</time>
-                        <span class="affects">affects {{ event.get_service_names|join:", "}}</span>
+                        <span class="affects">affects {% for slug, name in event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                     </li>
                 {% endfor %}
             </ul>

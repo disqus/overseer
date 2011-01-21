@@ -105,8 +105,8 @@ class Event(models.Model):
     def get_absolute_url(self):
         return ('overseer:event', [self.pk], {})
 
-    def get_service_names(self):
-        return self.services.values_list('name', flat=True)
+    def get_services(self):
+        return self.services.values_list('slug', 'name')
 
     def get_duration(self):
         return self.date_updated - self.date_created
