@@ -187,3 +187,8 @@ table td.service h2 a {
 table td.service p {
     color: #999;
 }
+
+h3 {
+    font-size: 18px;
+    font-weight: normal;
+}

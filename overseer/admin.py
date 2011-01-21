@@ -5,6 +5,7 @@ from overseer.models import Service, Event, EventUpdate
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'order', 'date_updated')
     search_fields = ('name', 'description')
+    prepopulated_fields = {'slug': ('name',)}
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('date_created', 'status', 'message')

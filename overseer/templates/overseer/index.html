@@ -2,28 +2,44 @@
 
 {% block content %}
 
-<table>
-    <thead>
-        <tr>
-            <th class="status">Status</th>
-            <th>Service</th>
-            <th>Last Event</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for service in service_list %}
-            <tr>
-                <td class="status status-{{ service.status }}">{{ service.get_status_display }}</td>
-                <td class="service">
-                    <h2><a href="#">{{ service.name }}</a></h2>
-                    {% if service.description %}
-                        <p>{{ service.description }}</p>
-                    {% endif %}
-                </td>
-                <td><a href="#">{{ service.date_updated|timesince }}</a></td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="latest-update">
+    <strong>This is the latest status update for any service on the network</strong>
+    <time>3 hours ago</time>
+</div>
 
+<div class="service-list">
+    <table>
+        <thead>
+            <tr>
+                <th class="status">Status</th>
+                <th>Service</th>
+                <th>Last Event</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in service_list %}
+                <tr>
+                    <td class="status status-{{ service.status }}">{{ service.get_status_display }}</td>
+                    <td class="service">
+                        <h2><a href="{% url overseer:service service.slug %}">{{ service.name }}</a></h2>
+                        {% if service.description %}
+                            <p>{{ service.description }}</p>
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url overseer:last_event service.slug %}">{{ service.date_updated|timesince }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="update-list">
+    <ul>
+        <li>
+            <strong>This is an update.</strong>
+            <time>3 hours ago</time>
+            <span>affects API, Embed</span>
+        </li>
+    </ul>
+</div>
 {% endblock %}

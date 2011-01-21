@@ -9,4 +9,7 @@ urlpatterns = patterns('',
     }, name='media'),
 
     url(r'^$', 'overseer.views.index', name='index'),
+    url(r'^service/(?P<slug>[^/]+)/$', 'overseer.views.service', name='service'),
+    url(r'^service/(?P<slug>[^/]+)/last-event/$', 'overseer.views.last_event', name='last_event'),
+    url(r'^event/(?P<id>[^/]+)/$', 'overseer.views.event', name='event'),
 )
