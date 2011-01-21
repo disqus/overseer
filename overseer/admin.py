@@ -7,10 +7,15 @@ class ServiceAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
 
+class EventUpdateInline(admin.StackedInline):
+    model = EventUpdate
+    extra = 1
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ('date_created', 'status', 'message')
     search_fields = ('message',)
     list_filter = ('services',)
+    inlines = [EventUpdateInline]
 
 class EventUpdateAdmin(admin.ModelAdmin):
     list_display = ('date_created', 'message', 'status', 'event')
