@@ -45,6 +45,8 @@ class Service(models.Model):
     def handle_event_m2m_save(cls, sender, instance, action, reverse, model, pk_set, **kwargs):
         if not action.startswith('post_'):
             return
+        if not pk_set:
+            return
         
         if model is Service:
             for service in Service.objects.filter(pk__in=pk_set):
@@ -76,7 +78,7 @@ class Service(models.Model):
         elif event.status < self.status:
             # If no more events match the current self status, let's update
             # it to the current status
-            if not Event.objects.filter(selfs=self, status=self.status)\
+            if not Event.objects.filter(services=self, status=self.status)\
                                 .exclude(pk=event.pk).exists():
                 update_qs.filter(status__gt=event.status)\
                          .update(status=event.status)
