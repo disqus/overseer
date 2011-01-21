@@ -56,10 +56,13 @@ def service(request, slug):
 def event(request, id):
     "Displays a list of all services and their current status."
     
-    event = Event.objects.get(pk=id)
+    evt = Event.objects.get(pk=id)
+    
+    update_list = list(evt.eventupdate_set.order_by('-date_created'))
     
     return respond('overseer/event.html', {
-        'event': event,
+        'event': evt,
+        'update_list': update_list,
     }, request)
 
 def last_event(request, slug):
@@ -68,10 +71,8 @@ def last_event(request, slug):
     service = Service.objects.get(slug=slug)
     
     try:
-        event = service.event_set.order_by('-date_created')[0]
+        evt = service.event_set.order_by('-date_created')[0]
     except IndexError:
         return HttpResponseRedirect(service.get_absolute_url())
     
-    return respond('overseer/event.html', {
-        'event': event,
-    }, request)
+    return event(request, evt.pk)

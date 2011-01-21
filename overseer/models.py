@@ -84,7 +84,22 @@ class Service(models.Model):
                          .update(status=event.status)
                 self.status = event.status
 
-class Event(models.Model):
+class EventBase(models.Model):
+    class Meta:
+        abstract = True
+
+    def get_message(self):
+        if self.message:
+            return self.message
+        elif self.status == 0:
+            return 'Service is operating as expected.'
+        elif self.status == 1:
+            return 'Experiencing some issues. Services mostly operational.'
+        elif self.status == 2:
+            return 'Service is unavailable.'
+        return ''
+
+class Event(EventBase):
     """
     An ``Event`` is a collection of updates related to one event.
     
@@ -110,17 +125,6 @@ class Event(models.Model):
 
     def get_duration(self):
         return self.date_updated - self.date_created
-
-    def get_message(self):
-        if self.message:
-            return self.message
-        elif self.status == 0:
-            return 'Service is operating as expected.'
-        elif self.status == 1:
-            return 'Experiencing some issues. Services mostly operational.'
-        elif self.status == 2:
-            return 'Service is unavailable.'
-        return ''
 
     @classmethod
     def handle_update_save(cls, instance, created, **kwargs):
@@ -155,7 +159,7 @@ class Event(models.Model):
             # Without sending the signal Service will fail to update
             post_save.send(sender=Event, instance=event, created=False)
 
-class EventUpdate(models.Model):
+class EventUpdate(EventBase):
     """
     An ``EventUpdate`` contains a single update to an ``Event``. The latest update
     will always be reflected within the event, carrying over it's ``status`` and ``message``.

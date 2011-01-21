@@ -48,7 +48,6 @@ def duration(value):
         minutes = value / 60
         value = value % 60
     seconds = value
-    print value
     if hours:
         return '%s hours' % (hours,)
     if minutes:

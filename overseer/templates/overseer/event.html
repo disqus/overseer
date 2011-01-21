@@ -1,0 +1,25 @@
+{% extends "overseer/base.html" %}
+
+{% load overseer_helpers %}
+
+{% block content %}
+    <p><a href="{% url overseer:index %}">Return to service overview</a></p>
+    
+    <div class="latest-event event status-{{ event.status }}">
+        <p>{{ event.description }}</p>
+        <time>{{ event.date_updated|timesince }}{% if not event.status %} (lasted {{ event.get_duration|duration }}){% endif %}</time>
+        <span class="affects">affects {% for slug, name in event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+    </div>
+
+    <div class="update-list">
+        <h3>Updates (newest first)</h3>
+        <ul>
+            {% for update in update_list %}
+                <li class="update status-{{ update.status }}">
+                    <p>{{ update.get_message }}</p>
+                    <time>{{ update.date_created|timesince }}</time>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
