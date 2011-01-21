@@ -132,8 +132,10 @@ footer {
 #container { background-color: #eee; }
 #main { padding: 0 10px; }
 #main .wrapper {
+    position: relative;
+    overflow: hidden;
     margin: 0 auto 20px;
-    padding: 20px;
+    padding: 20px 20px 0;
     background-color: #fff;
     
     -webkit-border-radius: 6px;
@@ -145,9 +147,12 @@ footer {
     box-shadow: 0 1px 2px rgba(0,0,0,.2);    
 }
 
+table, p, h1, h2, h3, h4, h5, h6, ul, ol {
+    margin-bottom: 20px;
+}
+
 table {
     width: 100%;
-    margin-bottom: 10px;
 }
 table thead th {
     text-align: left;
@@ -157,11 +162,19 @@ table thead th {
 table td, table th {
     padding: 6px 6px;
 }
+table tbody tr:nth-child(even) {
+    background: #f3f3f3;
+}
+table thead tr {
+    background: #eee;
+}
 table th.status {
     text-align: center;
+    padding: 0;
 }
 table td.status {
     width: 32px;
+    padding: 0;
     text-align: center;
     background-position: center center;
     background-repeat: no-repeat;
@@ -180,15 +193,66 @@ table td.service h2 {
     font-size: 24px;
     line-height: 32px;
     font-weight: normal;
+    margin-bottom: 0;
 }
 table td.service h2 a {
     text-decoration: none;
 }
 table td.service p {
     color: #999;
+    margin-bottom: 0;
+}
+table td.last-event {
+    width: 130px;
+    line-height: 32px;
 }
 
 h3 {
     font-size: 18px;
     font-weight: normal;
+}
+
+.latest-event {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+.event-list {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+.event-list ul {
+    list-style: none;
+    margin-left: 0;
+}
+.event p {
+    background-repeat: no-repeat;
+    background-position: top left;
+    padding-left: 22px;
+    margin-bottom: 0;
+}
+.event.status-0 p {
+    background-image: url('../images/green_light_16x16.png');
+}
+.event.status-1 p {
+    background-image: url('../images/yellow_light_16x16.png');
+}
+.event.status-2 p {
+    background-image: url('../images/red_light_16x16.png');
+}
+
+.event p {
+    font-weight: bold;
+}
+.event time,
+.event .affects {
+    font-size: 0.9em;
+    padding: 2px 6px; 
+    display: inline-block;
+}
+.event time {
+    margin-left: 22px;
+    color: #999;
+}
+.event .affects {
+    background: #ff9;
 }

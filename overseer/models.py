@@ -105,6 +105,23 @@ class Event(models.Model):
     def get_absolute_url(self):
         return ('overseer:event', [self.pk], {})
 
+    def get_service_names(self):
+        return self.services.values_list('name', flat=True)
+
+    def get_duration(self):
+        return self.date_updated - self.date_created
+
+    def get_message(self):
+        if self.message:
+            return self.message
+        elif self.status == 0:
+            return 'Service is operating as expected.'
+        elif self.status == 1:
+            return 'Experiencing some issues. Services mostly operational.'
+        elif self.status == 2:
+            return 'Service is unavailable.'
+        return ''
+
     @classmethod
     def handle_update_save(cls, instance, created, **kwargs):
         event = instance.event

@@ -30,13 +30,15 @@
     
     <div id="main" class="main">
         <div class="wrapper">
-            {% block content %}{% endblock %}
+            <div class="clearfix">
+                {% block content %}{% endblock %}
+            </div>
         </div>
     </div>
     
     <footer>
         <div class="wrapper">
-            Overseer | Powered by sexy Django magic | Conjured up by the <a href="http://code.disqus.com">DISQUS</a> team and other noble <a href="https://github.com/disqus/overseer/contributors">sorcerers</a>.
+            Powered by <a href="https://github.com/disqus/overseer">Overseer {{ OVERSEER_VERSION }}</a> | <a href="{% url admin:index %}">Admin</a> | Conjured up by the <a href="http://code.disqus.com">DISQUS</a> team and other noble <a href="https://github.com/disqus/overseer/contributors">sorcerers</a>.
         </div>
     </footer>
   </div> <!-- end of #container -->  
