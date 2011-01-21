@@ -127,6 +127,7 @@ header h1 {
     display: inline;
     font-size: 20pt;
     font-weight: normal;
+    text-shadow: 0 -1px 1px rgba(0,0,0,.4);
 }
 header h1 a {
     text-decoration: none;
@@ -237,6 +238,9 @@ table td.last-event {
 }
 .event-list li, .update-list li {
     margin-bottom: 5px;
+}
+.event p a {
+    text-decoration: none;
 }
 .event p, .update p {
     background-repeat: no-repeat;
