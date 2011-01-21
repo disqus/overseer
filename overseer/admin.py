@@ -11,7 +11,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 class EventForm(forms.ModelForm):
     if conf.TWITTER_ACCESS_TOKEN and conf.TWITTER_ACCESS_SECRET:
-        post_to_twitter = forms.BooleanField(required=False, label="Post an update to Twitter when I hit save", help_text="This will send a tweet with a brief summary, the permalink to the event (if BASE_URL is defined), and the hashtag of #status")
+        post_to_twitter = forms.BooleanField(required=False, label="Post to Twitter", help_text="This will send a tweet with a brief summary, the permalink to the event (if BASE_URL is defined), and the hashtag of #status for EACH update you add below.")
 
     class Meta:
         model = EventUpdate
