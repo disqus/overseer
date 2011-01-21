@@ -12,8 +12,8 @@ class EventUpdateInline(admin.StackedInline):
     extra = 1
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('date_created', 'status', 'message')
-    search_fields = ('message',)
+    list_display = ('date_created', 'description', 'status', 'date_updated')
+    search_fields = ('description', 'message')
     list_filter = ('services',)
     inlines = [EventUpdateInline]
 
