@@ -6,10 +6,16 @@ A service's status should be:
 - green if all(updates affecting service) are green
 """
 
+import datetime
+import oauth2
+import urlparse
+
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save, m2m_changed
 
-import datetime
+from overseer import conf
+from overseer.utils import SimpleTwitterClient
 
 STATUS_CHOICES = (
     (0, 'No Problems'),
@@ -125,6 +131,33 @@ class Event(EventBase):
 
     def get_duration(self):
         return self.date_updated - self.date_created
+
+    def post_to_twitter(self, message=None):
+        """Update twitter status, i.e., post a tweet"""
+
+        consumer = oauth2.Consumer(key=conf.TWITTER_CONSUMER_KEY,
+                                  secret=conf.TWITTER_CONSUMER_SECRET)
+        token = oauth2.Token(key=conf.TWITTER_ACCESS_TOKEN, secret=conf.TWITTER_ACCESS_SECRET)
+        client = SimpleTwitterClient(consumer=consumer, token=token)
+
+        if not message:
+            message = self.get_message()
+        
+        hash_tag = '#status'
+        
+        if conf.BASE_URL:
+            permalink = urlparse.urljoin(conf.BASE_URL, reverse('overseer:event_short', args=[self.pk]))
+            if len(message) + len(permalink) + len(hash_tag) > 138:
+                message = '%s.. %s %s' % (message[:140-4-len(hash_tag)-len(permalink)], permalink, hash_tag)
+            else:
+                message = '%s %s %s' % (message, permalink, hash_tag) 
+        else:
+            if len(message) + len(hash_tag) > 139:
+                message = '%s.. %s' % (message[:140-3-len(hash_tag)], hash_tag)
+            else:
+                message = '%s %s' % (message, hash_tag)
+                
+        return client.update_status(message)
 
     @classmethod
     def handle_update_save(cls, instance, created, **kwargs):

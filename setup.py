@@ -28,6 +28,7 @@ setup(
         'Django==1.2.4',
         'South',
         'django-devserver',
+        'oauth2',
     ],
     test_suite = 'overseer.tests',
     include_package_data=True,
