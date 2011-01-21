@@ -3,7 +3,7 @@ Overseer is a simple status board app written in Django.
 Screenshot
 ==========
 
-.. image:: http://cl.ly/320Q3r0E0T2x253h0l2C/Screen_shot_2011-01-20_at_5.47.59_PM.png
+.. image:: http://f.cl.ly/items/0p1r3S1V3D0h1K183a3D/Screen%20shot%202011-01-20%20at%205.47.59%20PM.png
 
 Install
 =======
