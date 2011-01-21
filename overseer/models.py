@@ -34,8 +34,8 @@ class Service(models.Model):
     description = models.TextField(blank=True, null=True)
     status = models.SmallIntegerField(choices=STATUS_CHOICES, editable=False, default=0)
     order = models.IntegerField(default=0)
-    date_created = models.DateTimeField(default=datetime.datetime.now)
-    date_updated = models.DateTimeField(default=datetime.datetime.now)
+    date_created = models.DateTimeField(default=datetime.datetime.now, editable=False)
+    date_updated = models.DateTimeField(default=datetime.datetime.now, editable=False)
     
     class Meta:
         ordering = ('order', 'name')
