@@ -3,8 +3,8 @@
 {% load overseer_helpers %}
 
 {% block content %}
-    <p><a href="{% url overseer:index %}">Return to service overview</a></p>
-    
+    <h3>Event Details</h3>
+
     <div class="latest-event event status-{{ event.status }}">
         <p>{{ event.description }}</p>
         <time>{{ event.date_updated|timesince }}{% if not event.status %} (lasted {{ event.get_duration|duration }}){% endif %}</time>

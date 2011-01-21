@@ -91,6 +91,7 @@ button {  width: auto; overflow: visible; }
 
 a { color: #333; }
 a:visited { color: inherit; }
+a:hover { color: #436586; }
 
 body { background-color: #e5e5e5; }
 
@@ -186,10 +187,11 @@ table th.status {
     padding: 0;
 }
 table td.status {
+    vertical-align: top;
     width: 32px;
     padding: 0;
     text-align: center;
-    background-position: center center;
+    background-position: center 6px;
     background-repeat: no-repeat;
     text-indent: -10000em;
 }
