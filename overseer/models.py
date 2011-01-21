@@ -90,6 +90,14 @@ class Service(models.Model):
                          .update(status=event.status)
                 self.status = event.status
 
+def join_with_and(values):
+    values = list(values)
+    if len(values) == 2:
+        return ' and '.join(values)
+    elif len(values) > 2:
+        return '%s, and %s' % (', '.join(values[:-1]), values[-1])
+    return values[0]
+
 class EventBase(models.Model):
     class Meta:
         abstract = True
@@ -98,11 +106,11 @@ class EventBase(models.Model):
         if self.message:
             return self.message
         elif self.status == 0:
-            return 'Service is operating as expected.'
+            return '%s operating as expected.' % join_with_and(a[1] for a in self.get_services())
         elif self.status == 1:
-            return 'Experiencing some issues. Services mostly operational.'
+            return 'Experiencing some issues with %s.' % join_with_and(a[1] for a in self.get_services())
         elif self.status == 2:
-            return 'Service is unavailable.'
+            return '%s may be unavailable.' % join_with_and(a[1] for a in self.get_services())
         return ''
 
 class Event(EventBase):
@@ -204,6 +212,9 @@ class EventUpdate(EventBase):
 
     def __unicode__(self):
         return unicode(self.date_created)
+
+    def get_services(self):
+        return self.event.services.values_list('slug', 'name')
 
 post_save.connect(Service.handle_event_save, sender=Event)
 post_save.connect(Event.handle_update_save, sender=EventUpdate)
