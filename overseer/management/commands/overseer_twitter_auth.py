@@ -64,6 +64,7 @@ class Command(BaseCommand):
         resp, content = client.request(access_token_url, "POST")
         access_token = dict(urlparse.parse_qsl(content))
 
+        print 
         print "Configuration changes:"
         print 
         print "    'TWITTER_ACCESS_TOKEN':  '%s'," % access_token['oauth_token']
