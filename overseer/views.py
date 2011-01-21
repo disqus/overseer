@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.urlresolvers import reverse
 from django.db.models.query import Q
 from django.http import HttpResponseRedirect
 
@@ -28,7 +29,7 @@ def index(request):
     
     event_list = list(Event.objects\
                              .filter(Q(status__gt=0) | Q(date_updated__gte=datetime.datetime.now()-datetime.timedelta(days=1)))\
-                             .order_by('-date_created')[0:5])
+                             .order_by('-date_created')[0:6])
     
     if event_list:
         latest_event, event_list = event_list[0], event_list[1:]
@@ -44,8 +45,11 @@ def index(request):
 def service(request, slug):
     "Displays a list of all services and their current status."
     
-    service = Service.objects.get(slug=slug)
-    
+    try:
+        service = Service.objects.get(slug=slug)
+    except Service.DoesNotExist:
+        return HttpResponseRedirect(reverse('overseer:index'))
+        
     event_list = service.event_set.order_by('-date_created')
     
     return respond('overseer/service.html', {
@@ -56,7 +60,10 @@ def service(request, slug):
 def event(request, id):
     "Displays a list of all services and their current status."
     
-    evt = Event.objects.get(pk=id)
+    try:
+        evt = Event.objects.get(pk=id)
+    except Event.DoesNotExist:
+        return HttpResponseRedirect(reverse('overseer:index'))
     
     update_list = list(evt.eventupdate_set.order_by('-date_created'))
     
@@ -68,7 +75,10 @@ def event(request, id):
 def last_event(request, slug):
     "Displays a list of all services and their current status."
     
-    service = Service.objects.get(slug=slug)
+    try:
+        service = Service.objects.get(slug=slug)
+    except Service.DoesNotExist:
+        return HttpResponseRedirect(reverse('overseer:index'))
     
     try:
         evt = service.event_set.order_by('-date_created')[0]
