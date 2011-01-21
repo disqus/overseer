@@ -31,7 +31,13 @@
                                 <p>{{ service.description }}</p>
                             {% endif %}
                         </td>
-                        <td class="last-event"><a href="{% url overseer:last_event service.slug %}">{{ service.date_updated|timesince }}</a></td>
+                        <td class="last-event">
+                            {% if service.date_updated != service.date_created %}
+                                <a href="{% url overseer:last_event service.slug %}">{{ service.date_updated|timesince }}</a>
+                            {% else %}
+                                <em>n/a</em>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
