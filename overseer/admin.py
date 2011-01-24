@@ -29,7 +29,7 @@ class EventAdmin(admin.ModelAdmin):
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save()
-        if form.cleaned_data['post_to_twitter']:
+        if 'post_to_twitter' in form.cleaned_data and form.cleaned_data['post_to_twitter']:
             for obj in instances:
                 obj.event.post_to_twitter(obj.get_message())
 
