@@ -90,6 +90,15 @@ class Service(models.Model):
                          .update(status=event.status)
                 self.status = event.status
 
+    def get_message(self):
+        if self.status == 0:
+            return 'This service is operating as expected.'
+        elif self.status == 1:
+            return 'This service is experiencing some issues.'
+        elif self.status == 2:
+            return 'This service may be unavailable.'
+        return ''
+
 def join_with_and(values):
     values = list(values)
     if len(values) == 2:
