@@ -5,30 +5,34 @@
 {% block content %}
     <table>
         <tbody>
-            <tr>
+            <tr class="status-{{ service.status }}">
                 <td class="status status-{{ service.status }}">{{ service.get_status_display }}</td>
                 <td class="service">
                     <h2><a href="{% url overseer:service service.slug %}">{{ service.name }}</a></h2>
                     {% if service.description %}
                         <p>{{ service.description }}</p>
                     {% endif %}
+                    <p class="status">{{ service.get_message }}</p>
                 </td>
             </tr>
         </tbody>
     </table>
-
-    {% if event_list %}
-        <div class="event-list">
-            <h3>Recent Events</h3>
-            <ul>
-                {% for event in event_list %}
-                    <li class="event status-{{ event.status }}">
-                        <p><a href="{% url overseer:event event.pk %}">{{ event.description }}</a></p>
-                        <time>{{ event.date_updated|timesince }}{% if not event.status %} (lasted {{ event.get_duration|duration }}){% endif %}</time>
-                        <span class="affects">affects {% for slug, name in event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+    
+    <div class="event-list">
+        <h3>Recent Events</h3>
+        {% if event_list %}
+                <ul>
+                    {% for event in event_list %}
+                        <li class="event status-{{ event.status }}">
+                            <p><a href="{% url overseer:event event.pk %}">{{ event.description }}</a></p>
+                            <time>{{ event.date_updated|timesince }}{% if not event.status %} (lasted {{ event.get_duration|duration }}){% endif %}</time>
+                            <span class="affects">affects {% for slug, name in event.get_services %}<a href="{% url overseer:service slug %}">{{ name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p>There are no events recorded for this service.</p>
+        {% endif %}
+    </div>
 {% endblock %}

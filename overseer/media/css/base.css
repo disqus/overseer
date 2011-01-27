@@ -223,6 +223,23 @@ table td.service p {
     color: #999;
     margin-bottom: 0;
 }
+table td.service p.status {
+    margin-top: 10px;
+    color: #000;
+    padding: 3px 6px;
+}
+table .status-0 td.service p.status {
+    background: green;
+    color: #fff;
+}
+table .status-1 td.service p.status {
+    background: orange;
+    color: #fff;
+}
+table .status-2 td.service p.status {
+    background: red;
+    color: #fff;
+}
 table td.last-event {
     width: 130px;
     line-height: 32px;
