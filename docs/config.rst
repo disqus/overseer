@@ -17,6 +17,22 @@ Several configuration variables are available within Overseer. All of these are 
       'BASE_URL' : 'http://status.disqus.com',
   }
 
+Email Subscriptions
+-------------------
+
+Allow users to subscribe to email notifications on event updates by configuring the following settings in ``OVERSEER_CONFIG``::
+
+  OVERSEER_CONFIG = {
+      # Enable subscriptions
+      'ALLOW_SUBSCRIPTIONS': True,
+      
+      # Specify an email from address
+      'FROM_EMAIL': 'overseer@domain.com',
+      
+      # Ensure base url is set
+      'BASE_URL': 'http://status.disqus.com',
+  }
+
 Twitter Integration
 -------------------
 

@@ -1,0 +1,28 @@
+{% extends "overseer/base.html" %}
+
+{% load overseer_helpers %}
+
+{% block content %}
+    <h3>Subscription Settings</h3>
+
+    <form method="POST">
+        
+        {% csrf_token %}
+        
+        <p>Choose the services you wish to receive updates for:</p>
+
+        <div class="subscription-service-list{% if form.services.errors %} has-errors{% endif %}">
+            <ul>
+                <li><label><input type="checkbox" name="unsubscribe" value="1"/> Unsubscribe from all notifications</label></li>
+            </ul>
+            {{ form.services }}
+        </div>
+        {% if form.services.errors %}
+            {{ form.services.errors }}
+        {% endif %}
+
+        <input type="submit" value="Save Settings"/>
+
+    </form>
+
+{% endblock %}

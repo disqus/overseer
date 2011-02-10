@@ -10,4 +10,5 @@ def default(request):
         'OVERSEER_NAME': conf.NAME,
         'OVERSEER_MEDIA_PREFIX': (conf.MEDIA_PREFIX or reverse('overseer:media')).rstrip('/'),
         'OVERSEER_VERSION': overseer.VERSION,
+        'OVERSEER_ALLOW_SUBSCRIPTIONS': conf.ALLOW_SUBSCRIPTIONS,
     }

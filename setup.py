@@ -17,7 +17,7 @@ class mytest(test):
 
 setup(
     name='Overseer',
-    version='0.1.2',
+    version='0.2.0',
     author='DISQUS',
     author_email='opensource@disqus.com',
     url='http://github.com/disqus/overseer',
@@ -29,6 +29,7 @@ setup(
         'South',
         'django-devserver',
         'oauth2',
+        'uuid',
     ],
     test_suite = 'overseer.tests',
     include_package_data=True,

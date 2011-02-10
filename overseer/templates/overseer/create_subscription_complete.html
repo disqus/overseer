@@ -1,0 +1,10 @@
+{% extends "overseer/base.html" %}
+
+{% load overseer_helpers %}
+
+{% block content %}
+    <h3>Confirm Subscription</h3>
+
+    <p>We have sent an email to <strong>{{ subscription.email }}</strong> to confirm your subscription. You must follow the instructions in order to activate email notifications.</p>
+
+{% endblock %}

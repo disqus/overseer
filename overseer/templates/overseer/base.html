@@ -32,6 +32,9 @@
         <div class="wrapper">
             <div class="clearfix">
                 {% block content %}{% endblock %}
+                {% if OVERSEER_ALLOW_SUBSCRIPTIONS %}
+                    <p>Want to get notified when things change? <a href="{% url overseer:create_subscription %}">Subscribe to status updates</a>.</p>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -41,7 +41,7 @@ pre {
     white-space: -o-pre-wrap; /* Opera 7 */
     word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
-body, select, input, textarea {   color: #444; }
+body, select, input, textarea { color: #444; }
 h1,h2,h3,h4,h5,h6 { font-weight: bold; }
 html { overflow-y: scroll; }
 
@@ -80,7 +80,7 @@ button {  width: auto; overflow: visible; }
 .hidden { display: none; visibility: hidden; } 
 .visuallyhidden { position: absolute !important; clip: rect(1px 1px 1px 1px);  clip: rect(1px, 1px, 1px, 1px); }
 .invisible { visibility: hidden; }
-.clearfix:before, .clearfix:after {  content: "\0020"; display: block; height: 0; visibility: hidden;	 } 
+.clearfix:before, .clearfix:after {  content: "\0020"; display: block; height: 0; visibility: hidden;     } 
 .clearfix:after { clear: both; }
 .clearfix { zoom: 1; }
 
@@ -95,7 +95,7 @@ a:hover { color: #436586; }
 
 body { background-color: #e5e5e5; }
 
-table, p, h1, h2, h3, h4, h5, h6, ul, ol {
+table, p, h1, h2, h3, h4, h5, h6, ul, ol, form, dl {
     margin-bottom: 20px;
 }
 
@@ -297,4 +297,31 @@ table td.last-event {
 }
 .event .affects {
     background: #ff9;
+}
+
+.subscription-service-list ul {
+    list-style: none;
+    margin-left: 0;
+}
+.subscription-service-list li label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type=text], input[type=password],
+textarea, select {
+    border: 1px solid #999;
+    padding: 2px 6px;
+}
+
+.subscription-error-list p {
+    color: red;
+}
+.has-errors input {
+    border-color: red;
+    border-style: solid;
+}
+.errorlist {
+    color: red;
 }

@@ -1,0 +1,38 @@
+{% extends "overseer/base.html" %}
+
+{% load overseer_helpers %}
+
+{% block content %}
+    <h3>Subscription Settings</h3>
+
+    <form method="POST">
+        
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div class="subscription-error-list">
+                <p>There were some errors processing your subscription.</p>
+            </div>
+        {% endif %}
+
+        <p>Tell us where you'd like to receive updates:</p>
+
+        <p class="{% if form.email.errors %}has-errors{% endif %}">{{ form.email }}</p>
+        {% if form.email.errors %}
+            {{ form.email.errors }}
+        {% endif %}
+
+        <p>Choose the services you wish to receive updates for:</p>
+
+        <div class="subscription-service-list{% if form.services.errors %} has-errors{% endif %}">
+            {{ form.services }}
+        </div>
+        {% if form.services.errors %}
+            {{ form.services.errors }}
+        {% endif %}
+
+        <input type="submit" value="Save Settings"/>
+
+    </form>
+
+{% endblock %}

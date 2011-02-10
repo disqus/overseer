@@ -9,7 +9,10 @@ A service's status should be:
 import datetime
 import oauth2
 import urlparse
+import uuid
+import warnings
 
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save, m2m_changed
@@ -22,6 +25,21 @@ STATUS_CHOICES = (
     (1, 'Some Issues'),
     (2, 'Unavailable'),
 )
+
+SUBSCRIPTION_EMAIL_TEMPLATE = """
+A service's status has changed on %(name)s:
+
+%(message)s
+
+This update affects the following:
+
+%(affects)s
+
+----
+
+To change your subscription settings, please visit %(sub_url)s
+
+""".strip()
 
 class Service(models.Model):
     """
@@ -225,6 +243,68 @@ class EventUpdate(EventBase):
     def get_services(self):
         return self.event.services.values_list('slug', 'name')
 
+class BaseSubscription(models.Model):
+    ident = models.CharField(max_length=32, unique=True)
+    date_created = models.DateTimeField(default=datetime.datetime.now, editable=False)
+    services = models.ManyToManyField(Service)
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return self.email
+
+    def save(self, *args, **kwargs):
+        if not self.ident:
+            self.ident = uuid.uuid4().hex
+        super(BaseSubscription, self).save(*args, **kwargs)
+
+class Subscription(BaseSubscription):
+    """
+    Represents an email subscription.
+    """
+    email = models.EmailField(unique=True)
+
+    @classmethod
+    def handle_update_save(cls, instance, created, **kwargs):
+        if not created:
+            return
+
+        if not conf.ALLOW_SUBSCRIPTIONS:
+            return
+
+        if not conf.FROM_EMAIL:
+            # TODO: grab system default
+            warnings.warn('Configuration error with Oveerseer: FROM_EMAIL is not set')
+            return
+        
+        if not conf.BASE_URL:
+            warnings.warn('Configuration error with Oveerseer: BASE_URL is not set')
+            return
+        
+        services = list(instance.event.services.all())
+        affects = '\n'.join('- %s' % s.name for s in services)
+        message = instance.get_message()
+        
+        for email, ident in cls.objects.filter(services__in=services)\
+                                       .values_list('email', 'ident'):
+            # send email
+            body = SUBSCRIPTION_EMAIL_TEMPLATE % dict(
+                sub_url = urlparse.urljoin(conf.BASE_URL, reverse('overseer:update_subscription', args=[ident])),
+                message = message,
+                affects = affects,
+                name = conf.NAME,
+            )
+            send_mail('Status Change on %s' % conf.NAME, body, conf.FROM_EMAIL, [email],
+                      fail_silently=True)
+
+class UnverifiedSubscription(BaseSubscription):
+    """
+    A temporary store for unverified subscriptions.
+    """
+    email = models.EmailField()
+
 post_save.connect(Service.handle_event_save, sender=Event)
 post_save.connect(Event.handle_update_save, sender=EventUpdate)
 m2m_changed.connect(Service.handle_event_m2m_save, sender=Event.services.through)
+post_save.connect(Subscription.handle_update_save, sender=EventUpdate)

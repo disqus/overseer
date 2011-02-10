@@ -1,0 +1,16 @@
+{% extends "overseer/base.html" %}
+
+{% load overseer_helpers %}
+
+{% block content %}
+    <h3>Subscription Confirmed</h3>
+
+    <p>We have verified your subscription settings and you will now receive updates on the following at <strong>{{ subscription.email }}</strong>:</p>
+    
+    <ul>
+        {% for service in subscription.services.all %}
+            <li>{{ service.name }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

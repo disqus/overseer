@@ -1,11 +1,31 @@
 import datetime
+import urlparse
 
+from django.core.context_processors import csrf
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db.models.query import Q
 from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_protect
 
-from overseer import context_processors
-from overseer.models import Service, Event
+from overseer import context_processors, conf
+from overseer.forms import NewSubscriptionForm, UpdateSubscriptionForm
+from overseer.models import Service, Event, Subscription, UnverifiedSubscription
+
+def requires(value_or_callable):
+    def wrapped(func):
+        def call(request, *args, **kwargs):
+            if callable(value_or_callable):
+                result = value_or_callable(request)
+            else:
+                result = value_or_callable
+            
+            if not result:
+                return HttpResponseRedirect(reverse('overseer:index'))
+            
+            return func(request, *args, **kwargs)
+        return call
+    return wrapped
 
 def respond(template, context={}, request=None, **kwargs):
     "Calls render_to_response with a RequestConext"
@@ -86,3 +106,100 @@ def last_event(request, slug):
         return HttpResponseRedirect(service.get_absolute_url())
     
     return event(request, evt.pk)
+
+@requires(conf.ALLOW_SUBSCRIPTIONS)
+@csrf_protect
+def update_subscription(request, ident):
+    "Shows subscriptions options for a verified subscriber."
+    
+    try:
+        subscription = Subscription.objects.get(ident=ident)
+    except Subscription.DoesNotExist:
+        return respond('overseer/invalid_subscription_token.html', {}, request)
+
+    if request.POST:
+        form = UpdateSubscriptionForm(request.POST, instance=subscription)
+        if form.is_valid():
+            if form.cleaned_data['unsubscribe']:
+                subscription.delete()
+        
+                return respond('overseer/unsubscribe_confirmed.html', {
+                    'email': subscription.email,
+                })
+            else:
+                form.save()
+
+            return HttpResponseRedirect(request.get_full_path())
+    else:
+        form = UpdateSubscriptionForm(instance=subscription)
+        
+    context = csrf(request)
+    context.update({
+        'form': form,
+        'subscription': subscription,
+        'service_list': Service.objects.all(),
+    })
+
+    return respond('overseer/update_subscription.html', context, request)
+
+@requires(conf.ALLOW_SUBSCRIPTIONS)
+@csrf_protect
+def create_subscription(request):
+    "Shows subscriptions options for a new subscriber."
+    
+    if request.POST:
+        form = NewSubscriptionForm(request.POST)
+        if form.is_valid():
+            unverified = form.save()
+
+            body = """Please confirm your email address to subscribe to status updates from %(name)s:\n\n%(link)s""" % dict(
+                name=conf.NAME,
+                link=urlparse.urljoin(conf.BASE_URL, reverse('overseer:verify_subscription', args=[unverified.ident]))
+            )
+
+            # Send verification email
+            from_mail = conf.FROM_EMAIL
+            if not from_mail:
+                from_mail = 'overseer@%s' % request.get_host().split(':', 1)[0]
+            
+            send_mail('Confirm Subscription', body, from_mail, [unverified.email],
+                      fail_silently=True)
+            
+            # Show success page
+            return respond('overseer/create_subscription_complete.html', {
+                'subscription': unverified,
+            }, request)
+    else:
+        form = NewSubscriptionForm()
+
+    context = csrf(request)
+    context.update({
+        'form': form,
+        'service_list': Service.objects.all(),
+    })
+
+    return respond('overseer/create_subscription.html', context, request)
+
+@requires(conf.ALLOW_SUBSCRIPTIONS)
+def verify_subscription(request, ident):
+    """
+    Verifies an unverified subscription and create or appends
+    to an existing subscription.
+    """
+    
+    try:
+        unverified = UnverifiedSubscription.objects.get(ident=ident)
+    except UnverifiedSubscription.DoesNotExist:
+        return respond('overseer/invalid_subscription_token.html', {}, request)
+    
+    subscription = Subscription.objects.get_or_create(email=unverified.email, defaults={
+        'ident': unverified.ident,
+    })[0]
+
+    subscription.services = unverified.services.all()
+    
+    unverified.delete()
+    
+    return respond('overseer/subscription_confirmed.html', {
+        'subscription': subscription,
+    }, request)

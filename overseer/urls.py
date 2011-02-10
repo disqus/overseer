@@ -13,4 +13,7 @@ urlpatterns = patterns('',
     url(r'^service/(?P<slug>[^/]+)/last-event/$', 'overseer.views.last_event', name='last_event'),
     url(r'^event/(?P<id>[^/]+)/$', 'overseer.views.event', name='event'),
     url(r'^(?P<id>\d+)$', 'django.views.generic.simple.redirect_to', {'url': 'event/%(id)d/'}, name='event_short'),
+    url(r'^subscribe/$', 'overseer.views.create_subscription', name='create_subscription'),
+    url(r'^subscription/(?P<ident>[^/]+)/$', 'overseer.views.update_subscription', name='update_subscription'),
+    url(r'^subscription/(?P<ident>[^/]+)/verify/$', 'overseer.views.verify_subscription', name='verify_subscription'),
 )
