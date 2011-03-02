@@ -17,7 +17,7 @@ class mytest(test):
 
 setup(
     name='Overseer',
-    version='0.2.1',
+    version='0.2.2',
     author='DISQUS',
     author_email='opensource@disqus.com',
     url='http://github.com/disqus/overseer',
