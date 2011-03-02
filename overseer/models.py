@@ -287,7 +287,8 @@ class Subscription(BaseSubscription):
         message = instance.get_message()
         
         for email, ident in cls.objects.filter(services__in=services)\
-                                       .values_list('email', 'ident'):
+                                       .values_list('email', 'ident')\
+                                       .distinct():
             # send email
             body = SUBSCRIPTION_EMAIL_TEMPLATE % dict(
                 sub_url = urlparse.urljoin(conf.BASE_URL, reverse('overseer:update_subscription', args=[ident])),
