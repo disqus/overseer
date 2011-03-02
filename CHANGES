@@ -1,0 +1,7 @@
+0.2.2
+
+* Fixed an issue that would cause subscribers to receive multiple emails on a single subscription.
+
+0.2.1
+
+* Fixed an issue that would cause short status URL redirects to error on some webservers.
