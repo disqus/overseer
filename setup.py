@@ -25,7 +25,7 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     install_requires=[
-        'Django==1.2.4',
+        'Django>=1.2.4',
         'South',
         'django-devserver',
         'oauth2',
