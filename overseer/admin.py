@@ -2,12 +2,17 @@ from django import forms
 from django.contrib import admin
 
 from overseer import conf
-from overseer.models import Service, Event, EventUpdate
+from overseer.models import Service, Event, EventUpdate, Subscription
+
+class SubscriptionInline(admin.StackedInline):
+    model = Subscription.services.through
+    extra = 1
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'order', 'date_updated')
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [SubscriptionInline]
 
 class EventForm(forms.ModelForm):
     if conf.TWITTER_ACCESS_TOKEN and conf.TWITTER_ACCESS_SECRET:
@@ -37,6 +42,10 @@ class EventUpdateAdmin(admin.ModelAdmin):
     list_display = ('date_created', 'message', 'status', 'event')
     search_fields = ('message',)
 
+class SubscriptionAdmin(admin.ModelAdmin):
+    fields = ('email', 'services',)
+
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventUpdate, EventUpdateAdmin)
+admin.site.register(Subscription, SubscriptionAdmin)
