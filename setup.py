@@ -28,7 +28,7 @@ setup(
         'Django>=1.2.4',
         'South',
         'django-devserver',
-        'oauth2',
+        'oauth2>=1.5.169',
         'uuid',
     ],
     test_suite = 'overseer.tests',
