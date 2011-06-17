@@ -1,9 +1,15 @@
 """
+overseer.models
+~~~~~~~~~~~~~~~
+
 A service's status should be:
 
 - red if any(updates affecting service) are red
 - yellow if any(updates affecting service) are yellow
 - green if all(updates affecting service) are green
+
+:copyright: (c) 2011 DISQUS.
+:license: Apache License 2.0, see LICENSE for more details.
 """
 
 import datetime

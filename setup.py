@@ -31,6 +31,7 @@ setup(
         'oauth2>=1.5.169',
         'uuid',
     ],
+    license='Apache License 2.0',
     test_suite = 'overseer.tests',
     include_package_data=True,
     cmdclass={"test": mytest},
